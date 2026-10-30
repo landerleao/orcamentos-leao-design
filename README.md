@@ -12,6 +12,8 @@ Sistema para criar orçamentos com a identidade visual da **Leão Design** e ger
 - **Editor com prévia ao vivo:** o PDF é atualizado enquanto você digita.
 - **Catálogo de serviços:** preços salvos uma única vez, com **variações** (por exemplo, 500 / 1.000 / 2.000 unidades ou pacotes de 8 / 12 / 20 artes) e itens **sob consulta**.
 - **Clientes:** CPF/CNPJ, contato e endereço saem no PDF. Clientes já atendidos são preenchidos automaticamente.
+- **Painel de projetos:** orçamento aprovado vira projeto automaticamente, com etapas pelo tipo de serviço (identidade visual, social media, site, app, material gráfico) e parcelas tiradas da condição de pagamento (ex.: 50% na aprovação e 50% na entrega). O painel mostra o que falta receber, o recebido no mês, as entregas da semana e as parcelas atrasadas.
+- **Página do cliente:** link secreto, só de leitura e com a identidade da marca, para o cliente acompanhar etapas, prazos e pagamentos, copiar a chave PIX e chamar no WhatsApp. As anotações internas nunca aparecem para o cliente.
 - **PDF com a identidade da marca:** fundo escuro, onda de luz no topo, tipografia Poppins e paginação A4 automática, com cabeçalho repetido nas páginas de continuação.
 - **Mac e iPhone sincronizados:** login por e-mail e senha, dados na nuvem e cópia local para continuar trabalhando sem internet.
 - **App na Tela de Início do iPhone:** no celular, o PDF é gerado como arquivo e enviado pelo menu de compartilhar (WhatsApp, Arquivos, e-mail).
@@ -38,10 +40,13 @@ Sistema para criar orçamentos com a identidade visual da **Leão Design** e ger
 
 ### Banco de dados
 
-Duas tabelas, ambas com RLS (`user_id = auth.uid()`):
+Três tabelas, todas com RLS (`user_id = auth.uid()`):
 
 - `settings`: marca, dados da empresa e catálogo (uma linha por usuário, em `jsonb`)
 - `quotes`: um orçamento por linha (`jsonb`)
+- `projects`: um projeto por linha (`jsonb`), com o `share_token` do link do cliente
+
+A página do cliente não acessa as tabelas. Ela chama a função `projeto_compartilhado(token)` ([supabase/projetos.sql](supabase/projetos.sql)), que roda com `security definer`, devolve só o projeto daquele link (sem as anotações internas) e a marca para montar a página.
 
 A chave do Supabase no código é a **publishable**, feita para ficar no navegador. O acesso aos dados depende do login e das regras de RLS, e o cadastro de novos usuários fica desativado.
 

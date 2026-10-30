@@ -56,7 +56,7 @@ input[type=checkbox]{width:auto;accent-color:var(--accent)}
 .top .logo img{height:28px;display:block}
 .top .logo b{font-size:18px}
 .pillnav{display:flex;gap:2px;background:var(--light);border-radius:99px;padding:4px;margin-left:18px}
-.pillnav button{border:0;background:transparent;color:#555;border-radius:99px;padding:8px 18px;font-size:13px;cursor:pointer}
+.pillnav button{border:0;background:transparent;color:#555;border-radius:99px;padding:8px 18px;font-size:13px;cursor:pointer;white-space:nowrap}
 .pillnav button:hover{color:var(--dark)}
 .pillnav button.on{background:var(--accent);color:#fff;font-weight:500}
 main{padding:6px 28px 70px;max-width:1480px;margin:0 auto}
@@ -219,6 +219,84 @@ input:disabled{opacity:.45}
 }
 @media (max-width:1100px){.hero,.board,.editor,.brandgrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.preview{position:static}.search{width:100%;margin-left:0}.pillnav{margin-left:0}}
 
+/* ===== projetos ===== */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.pcard{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;cursor:pointer;transition:.15s;display:grid;gap:14px}
+.pcard:hover{border-color:#444;transform:translateY(-2px)}
+.pcard .ph{display:flex;gap:12px;align-items:center}
+.pcard .ph .av{flex:none}
+.pcard .pt{font-weight:500;font-size:15px;line-height:1.25}
+.pcard .pc{font-size:12px;color:var(--mute)}
+.prow{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:var(--mute);gap:10px}
+.prow b{color:var(--ink);font-weight:500;font-size:13px}
+.prow .late{color:#ff6b7f}
+.pbar{height:7px;border-radius:9px;background:#2a2a2a;overflow:hidden;margin-top:6px}
+.pbar i{display:block;height:100%;border-radius:9px;background:var(--accent)}
+.pbar.money i{background:#22c55e}
+.chip.andamento{background:#3b82f61a;border-color:#3b82f640;color:#60a5fa}
+.chip.aguardando{background:#f59e0b1a;border-color:#f59e0b40;color:#fbbf24}
+.chip.pausado{background:#7771;border-color:#7773;color:#aaa}
+.chip.concluido{background:#22c55e1a;border-color:#22c55e40;color:#4ade80}
+.chip.late{background:#ef44441a;border-color:#ef444440;color:#ff6b7f}
+.pgrid2{display:grid;grid-template-columns:1fr 400px;gap:16px;align-items:start}
+.pgrid2>div>.card{margin-bottom:14px}
+.big2{font-size:30px;font-weight:500;letter-spacing:-.01em}
+.steps{display:grid;gap:8px}
+.step{display:grid;grid-template-columns:34px 1fr 150px 38px;gap:8px;align-items:center}
+.stbtn{width:30px;height:30px;border-radius:50%;border:2px solid #444;background:transparent;cursor:pointer;display:grid;place-items:center;color:#fff;padding:0}
+.stbtn.andamento{border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
+.stbtn.concluida{background:var(--accent);border-color:var(--accent)}
+.stbtn .ic{width:15px;height:15px}
+.step.concluida input[data-sf=name]{color:var(--mute);text-decoration:line-through}
+.pay{display:grid;grid-template-columns:24px minmax(0,1fr) 104px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.pay:last-child{border-bottom:0}
+.pay .sub{grid-column:2/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 38px;gap:8px;align-items:center}
+.pay>*,.pay .sub>*,.step>*{min-width:0}
+.pay input[type=date],.step input[type=date]{min-width:0;padding-left:8px;padding-right:6px}
+.pay .note{grid-column:2/-1;font-size:12px}
+.pay.paid input[data-pf=label]{color:var(--mute)}
+.paybox{width:22px;height:22px;accent-color:#22c55e}
+.sum3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.sum3 div{background:var(--panel2);border-radius:14px;padding:10px 12px}
+.sum3 b{display:block;font-size:16px;font-weight:500}
+.sharebox{display:flex;gap:8px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:8px 8px 8px 12px;font-size:12px;color:var(--mute);word-break:break-all}
+@media (max-width:1100px){.pgrid2{grid-template-columns:1fr}}
+@media (max-width:700px){.pgrid{grid-template-columns:1fr}.step{grid-template-columns:34px 1fr 38px}.step input[type=date]{grid-column:2/3}.pillnav button{font-size:11.5px;padding:9px 2px;letter-spacing:-.01em}.sum3 b{font-size:14px}}
+
+/* ===== página do cliente ===== */
+#client{position:fixed;inset:0;z-index:80;overflow:auto;background:var(--cbg,#0c0c0c);color:var(--cfg,#f9f9f9);-webkit-overflow-scrolling:touch}
+#client .cw{max-width:600px;margin:0 auto;padding:0 18px 60px}
+#client .chero{position:relative;height:190px;margin:0 -18px;background:radial-gradient(420px 220px at 75% -40px,var(--ca),transparent 70%),radial-gradient(320px 200px at 10% -30px,color-mix(in srgb,var(--ca) 45%,#000),transparent 70%)}
+#client .chero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,var(--cbg))}
+#client .cw>*:not(.chero):not(.cprev){position:relative;z-index:1}
+#client .ctop{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;margin-top:-120px;margin-bottom:26px}
+#client .ctop img{height:26px}
+#client .clabel{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:color-mix(in srgb,var(--cfg) 55%,var(--cbg));font-weight:500}
+#client h1{font-size:34px;line-height:1.08;font-weight:600;margin:6px 0 8px;letter-spacing:-.02em}
+#client .ccard{background:color-mix(in srgb,var(--cfg) 5%,var(--cbg));border:1px solid color-mix(in srgb,var(--cfg) 10%,var(--cbg));border-radius:22px;padding:20px;margin-top:14px}
+#client .ccard h3{margin:0 0 14px;font-size:14px;font-weight:500}
+#client .cmute{color:color-mix(in srgb,var(--cfg) 55%,var(--cbg));font-size:13px}
+#client .cbar{height:9px;border-radius:9px;background:color-mix(in srgb,var(--cfg) 12%,var(--cbg));overflow:hidden;margin:12px 0 6px}
+#client .cbar i{display:block;height:100%;border-radius:9px;background:var(--ca)}
+#client .cbar.money i{background:#22c55e}
+#client .tl{position:relative;display:grid;gap:18px;padding-left:4px}
+#client .tl::before{content:'';position:absolute;left:14px;top:8px;bottom:8px;width:2px;background:color-mix(in srgb,var(--cfg) 12%,var(--cbg))}
+#client .ts{position:relative;display:grid;grid-template-columns:22px 1fr auto;gap:14px;align-items:center}
+#client .dot{width:22px;height:22px;border-radius:50%;border:2px solid color-mix(in srgb,var(--cfg) 25%,var(--cbg));background:var(--cbg);display:grid;place-items:center;z-index:1}
+#client .ts.concluida .dot{background:var(--ca);border-color:var(--ca);color:#fff}
+#client .ts.andamento .dot{border-color:var(--ca);box-shadow:0 0 0 5px color-mix(in srgb,var(--ca) 25%,transparent)}
+#client .ts.andamento .dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--ca)}
+#client .ts.concluida .tn{color:color-mix(in srgb,var(--cfg) 55%,var(--cbg))}
+#client .ts.andamento .tn{font-weight:600}
+#client .dot .ic{width:12px;height:12px}
+#client .cpay{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid color-mix(in srgb,var(--cfg) 8%,var(--cbg))}
+#client .cpay:last-child{border-bottom:0}
+#client .cbtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:99px;padding:14px;font:inherit;font-weight:500;cursor:pointer;margin-top:10px;text-decoration:none}
+#client .cbtn.wa{background:#22c55e;color:#fff}
+#client .cbtn.ghost{background:color-mix(in srgb,var(--cfg) 8%,var(--cbg));color:var(--cfg)}
+#client .cprev{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:10px;justify-content:space-between;background:var(--ca);color:#fff;padding:10px 16px;font-size:13px;margin:0 -18px}
+#client .cfoot{text-align:center;margin-top:30px;font-size:12px}
+
 /* ===== documento (PDF) ===== */
 .pages{display:grid;gap:16px}
 .blk{display:flow-root}
@@ -264,7 +342,7 @@ input:disabled{opacity:.45}
 #print{display:none}
 @media print{
   html,body{background:var(--printbg,#fff)}
-  .app,#login,.toast,.sheet,.demo-bar{display:none!important}
+  .app,#login,.toast,.sheet,.demo-bar,#client{display:none!important}
   #print{display:block}
   #print .pages{display:block}
   #print .doc{width:210mm;height:296.6mm;break-after:page;page-break-after:always}
@@ -291,6 +369,7 @@ input:disabled{opacity:.45}
     <div class="logo" id="who"></div>
     <nav class="pillnav">
       <button data-view="list">Orçamentos</button>
+      <button data-view="projects">Projetos</button>
       <button data-view="catalog">Catálogo</button>
       <button data-view="brand">Minha marca</button>
     </nav>
@@ -301,6 +380,7 @@ input:disabled{opacity:.45}
   <main id="main"></main>
 </div>
 <div id="print"></div>
+<div id="client" hidden></div>
 <div class="demo-bar" id="demoBar" hidden>Modo demonstração · dados fictícios <button class="btn sm light" data-act="logout">Sair</button></div>
 <div class="toast" id="toast"></div>
 
@@ -330,6 +410,9 @@ const ICONS = {
   search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>', lock:'<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',
   up:'<path d="M12 19V5M6 11l6-6 6 6"/>', down:'<path d="M12 5v14M6 13l6 6 6-6"/>', x:'<path d="M6 6l12 12M18 6L6 18"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7.5"/>', link:'<path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/>',
+  eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>', folder:'<path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>',
+  wa:'<path d="M20 11.6A8.4 8.4 0 017.6 19L4 20l1.1-3.4A8.4 8.4 0 1120 11.6z"/><path d="M9 8.5c0 3.6 2.9 6.5 6.5 6.5l1-1.5-2-1-1 1a4 4 0 01-3-3l1-1-1-2z"/>',
 };
 const ico = n => `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[n]}</svg>`;
 
@@ -393,7 +476,7 @@ function defaults() {
       c('Programação', 'Hora de desenvolvimento', 'hora', ''),
       c('Programação', 'Manutenção mensal', 'mês', 'Atualizações, backups e suporte'),
     ],
-    quotes: []
+    quotes: [], projects: []
   };
 }
 function hydrate(s) {
@@ -401,7 +484,7 @@ function hydrate(s) {
   if (!s) return d;
   return {
     settings: {...d.settings, ...s.settings, brand: {...d.settings.brand, ...s.settings?.brand}, company: {...d.settings.company, ...s.settings?.company}, defaults: {...d.settings.defaults, ...s.settings?.defaults}},
-    catalog: migrateCatalog(s.catalog, d.catalog), quotes: s.quotes || []
+    catalog: migrateCatalog(s.catalog, d.catalog), quotes: s.quotes || [], projects: s.projects || []
   };
 }
 // catálogo da versão antiga (sem variações): se nada foi preenchido, troca pelo novo; senão só completa os campos
@@ -414,7 +497,11 @@ function migrateCatalog(saved, fresh) {
 const SB_URL = 'https://uxcrfkwjlxhddhvcabci.supabase.co', SB_KEY = 'sb_publishable_AaF3xDPHVZaaeIG_jf8WRg_szUe-4AE';
 const sb = supabase.createClient(SB_URL, SB_KEY);
 let user = null, state = defaults(), dirty = false, edits = 0, demo = false;
-let synced = {settings: null, quotes: new Map()}; // o que já está na nuvem, em JSON
+const COLS = ['quotes', 'projects'];
+const missingTable = e => /PGRST205|42P01/.test(e?.code || '') || /schema cache|does not exist/i.test(e?.message || '');
+const emptySynced = () => ({settings: null, quotes: new Map(), projects: new Map()});
+let synced = emptySynced(); // o que já está na nuvem, em JSON
+let projectsReady = true;   // false enquanto a tabela de projetos não existir no Supabase
 const settingsJSON = () => JSON.stringify({settings: state.settings, catalog: state.catalog});
 
 // cópia neste aparelho: abre rápido e guarda o que foi feito sem internet
@@ -446,18 +533,24 @@ async function push() {
       if (error) throw error;
       synced.settings = sj;
     }
-    const now = new Map(state.quotes.map(q => [q.id, JSON.stringify(q)]));
-    const up = [...now].filter(([id, j]) => synced.quotes.get(id) !== j);
-    const del = [...synced.quotes.keys()].filter(id => !now.has(id));
-    if (up.length) {
-      const {error} = await sb.from('quotes').upsert(up.map(([id, j]) => ({id, user_id: user.id, data: JSON.parse(j), updated_at: stamp})));
-      if (error) throw error;
-      up.forEach(([id, j]) => synced.quotes.set(id, j));
-    }
-    if (del.length) {
-      const {error} = await sb.from('quotes').delete().in('id', del);
-      if (error) throw error;
-      del.forEach(id => synced.quotes.delete(id));
+    for (const col of COLS) {
+      if (col === 'projects' && !projectsReady) continue;
+      const now = new Map(state[col].map(x => [x.id, JSON.stringify(x)]));
+      const up = [...now].filter(([id, j]) => synced[col].get(id) !== j);
+      const del = [...synced[col].keys()].filter(id => !now.has(id));
+      if (up.length) {
+        const rows = up.map(([id, j]) => { const data = JSON.parse(j); return {id, user_id: user.id, data, updated_at: stamp, ...(col === 'projects' ? {share_token: data.shareToken || null} : {})}; });
+        const {error} = await sb.from(col).upsert(rows);
+        if (error && col === 'projects' && missingTable(error)) { projectsReady = false; toast('Rode o SQL dos projetos no Supabase para sincronizar os projetos.'); continue; }
+        if (error) throw error;
+        up.forEach(([id, j]) => synced[col].set(id, j));
+      }
+      if (del.length) {
+        const {error} = await sb.from(col).delete().in('id', del);
+        if (error && col === 'projects' && missingTable(error)) { projectsReady = false; continue; }
+        if (error) throw error;
+        del.forEach(id => synced[col].delete(id));
+      }
     }
     if (edits === e0) { dirty = false; cacheLocal(); setSync('ok'); }
   } catch (e) {
@@ -470,12 +563,21 @@ async function push() {
 }
 // baixa tudo da nuvem; devolve false se a conta ainda não tem dados
 async function pull() {
-  const [s, q] = await Promise.all([sb.from('settings').select('data').maybeSingle(), sb.from('quotes').select('data')]);
+  const [s, q, p] = await Promise.all([sb.from('settings').select('data').maybeSingle(), sb.from('quotes').select('data'), sb.from('projects').select('data')]);
   if (s.error || q.error) throw s.error || q.error;
   if (!s.data) return false;
-  state = hydrate({...s.data.data, quotes: q.data.map(r => r.data).sort((a, b) => (b.created || 0) - (a.created || 0))});
-  synced = {settings: settingsJSON(), quotes: new Map(state.quotes.map(x => [x.id, JSON.stringify(x)]))};
-  dirty = false; cacheLocal(); setSync('ok');
+  if (p.error && projectsReady) toast('Rode o SQL dos projetos no Supabase para sincronizar os projetos.');
+  const wasReady = projectsReady;
+  projectsReady = !p.error;
+  const byDate = (a, b) => (b.created || 0) - (a.created || 0);
+  let projects = projectsReady ? p.data.map(r => r.data) : state.projects;
+  // a tabela acabou de ser criada: mantém os projetos que só existiam neste aparelho (sobem no próximo envio)
+  if (!wasReady && projectsReady) projects = [...projects, ...state.projects.filter(x => !projects.some(y => y.id === x.id))];
+  state = hydrate({...s.data.data, quotes: q.data.map(r => r.data).sort(byDate), projects: projects.sort(byDate)});
+  synced = {settings: settingsJSON(), quotes: new Map(state.quotes.map(x => [x.id, JSON.stringify(x)])), projects: new Map(projectsReady ? p.data.map(r => [r.data.id, JSON.stringify(state.projects.find(x => x.id === r.data.id))]) : [])};
+  const local = state.projects.length > synced.projects.size;
+  dirty = local; cacheLocal(); setSync(local ? 'saving' : 'ok');
+  if (local) { clearTimeout(pushTimer); pushTimer = setTimeout(push, 300); }
   return true;
 }
 
@@ -695,13 +797,14 @@ function go(v, id) { view = v; editId = id ?? null; render(); window.scrollTo(0,
 function renderTop() {
   const b = state.settings.brand, logo = b.logoLight || b.logo;
   $('#who').innerHTML = logo ? `<img src="${logo}" alt="${esc(b.name)}">` : `<b>${esc(b.name)}</b>`;
-  document.querySelectorAll('.pillnav button').forEach(x => x.classList.toggle('on', x.dataset.view === view || (view === 'edit' && x.dataset.view === 'list')));
+  const nav = {edit: 'list', project: 'projects'}[view] || view;
+  document.querySelectorAll('.pillnav button').forEach(x => x.classList.toggle('on', x.dataset.view === nav));
   $('#newBtn').innerHTML = ico('plus') + '<span class="nt">Novo orçamento</span>';
 }
 
 function render() {
   applyBrand(); renderTop();
-  ({list: renderList, edit: renderEditor, catalog: renderCatalog, brand: renderBrand})[view]();
+  ({list: renderList, edit: renderEditor, catalog: renderCatalog, brand: renderBrand, projects: renderProjects, project: renderProject})[view]();
 }
 
 function renderList() {
@@ -770,6 +873,7 @@ function detailHTML(q) {
       <div><span class="lbl">Total</span><b class="ac">${brl(t.total)}</b></div>
       <div class="sp"></div>
       <button class="btn icon" data-dup="${q.id}" title="Duplicar">${ico('copy')}</button>
+      ${projectOf(q) ? `<button class="btn icon" data-act="go-project" data-id="${projectOf(q).id}" title="Ver projeto">${ico('folder')}</button>` : q.status === 'aprovado' ? `<button class="btn icon" data-act="make-project" data-id="${q.id}" title="Criar projeto">${ico('folder')}</button>` : ''}
       <button class="btn icon" data-edit="${q.id}" title="Editar">${ico('edit')}</button>
       <button class="btn accent" data-pdf="${q.id}">${ico('file')}Gerar PDF</button>
     </div>
@@ -947,6 +1051,279 @@ function sampleQuote() {
     items: [{name: 'Identidade visual completa', desc: 'Logotipo, paleta, tipografia e manual de marca', qty: 1, unit: 'projeto', price: 2800}, {name: 'Landing page', desc: 'Página responsiva com botão de WhatsApp', qty: 1, unit: 'projeto', price: 1900}, {name: 'Adesivo de vitrine', desc: '', qty: 2.5, unit: 'm²', price: 90}],
     discountType: 'pct', discount: 5, deadline: '20 dias úteis após aprovação', payment: state.settings.defaults.payment, validity: state.settings.defaults.validity, notes: state.settings.defaults.terms};
 }
+// ---------- projetos ----------
+const PSTATUS = {andamento: 'Em andamento', aguardando: 'Aguardando cliente', pausado: 'Pausado', concluido: 'Concluído'};
+const TEMPLATES = {
+  identidade: {label: 'Identidade visual', steps: ['Briefing', 'Pesquisa e referências', 'Criação das propostas', 'Apresentação', 'Ajustes', 'Entrega dos arquivos e manual']},
+  logo: {label: 'Logotipo', steps: ['Briefing', 'Criação', 'Apresentação', 'Ajustes', 'Entrega dos arquivos']},
+  social: {label: 'Social media', steps: ['Briefing e planejamento', 'Criação das artes', 'Aprovação do cliente', 'Ajustes', 'Entrega e agendamento']},
+  site: {label: 'Site / landing page', steps: ['Briefing e conteúdo', 'Layout', 'Aprovação do layout', 'Desenvolvimento', 'Testes e ajustes', 'Publicação']},
+  app: {label: 'Aplicativo', steps: ['Briefing e escopo', 'Protótipo', 'Aprovação do protótipo', 'Desenvolvimento', 'Testes', 'Publicação nas lojas']},
+  grafica: {label: 'Material gráfico', steps: ['Briefing', 'Criação', 'Aprovação', 'Arquivo final para a gráfica', 'Entrega']},
+  geral: {label: 'Geral', steps: ['Briefing', 'Execução', 'Aprovação', 'Ajustes', 'Entrega']},
+};
+const addDaysISO = (iso, n) => { const d = new Date(iso + 'T12:00'); d.setDate(d.getDate() + Math.round(n)); return d.toISOString().slice(0, 10); };
+const daysBetween = (a, b) => Math.round((new Date(b + 'T12:00') - new Date(a + 'T12:00')) / 864e5);
+// modelo de etapas que combina com o item mais caro do orçamento
+function guessTemplate(q) {
+  const rules = [[/aplicativo|\bapp\b/i, 'app'], [/site|landing/i, 'site'], [/identidade/i, 'identidade'], [/logo/i, 'logo'], [/post|carrossel|reels|social/i, 'social'], [/cart[aã]o|panfleto|adesivo|flyer/i, 'grafica']];
+  const items = [...q.items].sort((a, b) => num(b.qty) * num(b.price) - num(a.qty) * num(a.price));
+  for (const it of items) for (const [re, k] of rules) if (re.test(it.name)) return k;
+  return 'geral';
+}
+// prazo do orçamento ("15 dias úteis após aprovação") em dias corridos
+function deadlineDays(txt) { const m = /(\d+)\s*dias?\s*(úteis|uteis)?/i.exec(txt || ''); return !m ? 15 : m[2] ? Math.ceil(+m[1] * 7 / 5) : +m[1]; }
+// parcelas a partir da condição de pagamento ("50% na aprovação e 50% na entrega")
+function parcelas(total, payment, start, end) {
+  const found = [], re = /(\d+(?:[.,]\d+)?)\s*%\s*(?:na|no|em|à|ao|de|do|da)?\s*([^,;.%\d]*?)(?=\s+e\s+\d|[,;.]|\s*$|\s+\d)/gi;
+  let m; while ((m = re.exec(payment || ''))) found.push({pct: num(m[1]), label: m[2].trim()});
+  if (!found.length || Math.abs(found.reduce((s, x) => s + x.pct, 0) - 100) > .5) return [{id: uid(), label: 'Pagamento', value: total, due: end, paid: false, paidAt: ''}];
+  let acc = 0;
+  return found.map((x, i) => {
+    const value = i === found.length - 1 ? +(total - acc).toFixed(2) : +(total * x.pct / 100).toFixed(2); acc += value;
+    const l = x.label.toLowerCase();
+    const due = /aprova|entrada|in[ií]cio|fechamento|assinatura/.test(l) ? start : /entrega|final|conclus/.test(l) ? end : addDaysISO(start, daysBetween(start, end) / 2);
+    const label = (x.label ? x.label[0].toUpperCase() + x.label.slice(1) : 'Parcela ' + (i + 1)) + ` · ${fnum(x.pct)}%`;
+    return {id: uid(), label, value, due, paid: false, paidAt: ''};
+  });
+}
+function stepsFrom(key, start, end) {
+  const s = TEMPLATES[key].steps, span = Math.max(1, daysBetween(start, end));
+  return s.map((name, i) => ({id: uid(), name, due: addDaysISO(start, span * (i + 1) / s.length), status: i === 0 ? 'andamento' : 'pendente'}));
+}
+function buildProject(q, start = today()) {
+  const end = addDaysISO(start, deadlineDays(q.deadline)), tpl = guessTemplate(q), total = totals(q).total;
+  return {id: uid(), quoteId: q.id, number: q.number, title: q.title || q.items[0]?.name || 'Projeto', client: {...q.client},
+    status: 'andamento', start, end, template: tpl, steps: stepsFrom(tpl, start, end), payments: parcelas(total, q.payment, start, end),
+    clientNotes: '', internalNotes: '', shareToken: '', created: Date.now()};
+}
+function newProject(q) { const p = buildProject(q); state.projects.unshift(p); save(); return p; }
+const projectOf = q => state.projects.find(p => p.quoteId === q.id);
+const findP = id => state.projects.find(p => p.id === id);
+const paidOf = p => p.payments.filter(x => x.paid).reduce((s, x) => s + num(x.value), 0);
+const totalOf = p => p.payments.reduce((s, x) => s + num(x.value), 0);
+const currentStep = p => p.steps.find(s => s.status !== 'concluida');
+const doneCount = p => p.steps.filter(s => s.status === 'concluida').length;
+const lateOf = x => !x.paid && x.due && x.due < today();
+// mantém sempre uma etapa "em andamento": a primeira que não terminou
+function fixSteps(p) {
+  let found = false;
+  p.steps.forEach(s => { if (s.status === 'concluida') return; s.status = found ? 'pendente' : 'andamento'; found = true; });
+}
+function prazoTxt(p) {
+  if (p.status === 'concluido') return {txt: 'Entregue', cls: ''};
+  const d = daysBetween(today(), p.end);
+  return d < 0 ? {txt: `Atrasado ${-d} dia${d === -1 ? '' : 's'}`, cls: 'late'} : d === 0 ? {txt: 'Entrega hoje', cls: 'late'} : {txt: `Entrega em ${d} dia${d === 1 ? '' : 's'}`, cls: ''};
+}
+const shareURL = p => `${location.origin}${location.pathname}#p/${p.shareToken}`;
+
+let pfilter = 'ativos', projId = null;
+function renderProjects() {
+  const ps = state.projects, active = ps.filter(p => p.status !== 'concluido');
+  const ym = today().slice(0, 7), monthName = new Date().toLocaleDateString('pt-BR', {month: 'long'});
+  const receber = ps.reduce((s, p) => s + totalOf(p) - paidOf(p), 0);
+  const recebidoMes = ps.flatMap(p => p.payments).filter(x => x.paid && (x.paidAt || '').startsWith(ym)).reduce((s, x) => s + num(x.value), 0);
+  const semana = active.filter(p => { const d = daysBetween(today(), p.end); return d >= 0 && d <= 7; }).length;
+  const atrasadas = ps.flatMap(p => p.payments).filter(lateOf);
+  const counts = {ativos: active.length, concluidos: ps.length - active.length, todos: ps.length};
+  const list = ps.filter(p => pfilter === 'todos' || (pfilter === 'ativos') === (p.status !== 'concluido'))
+    .filter(p => !search || `${p.title} ${p.client.name} ${p.client.company} ${p.number}`.toLowerCase().includes(search.toLowerCase()));
+  $('#main').innerHTML = `
+  <div class="phead"><h1>Projetos</h1></div>
+  <div class="hero">
+    <div class="card stats">
+      <div class="stat"><span class="lbl">Projetos ativos</span><b>${active.length}</b><div class="sub">${counts.concluidos} concluído(s)</div></div>
+      <div class="stat"><span class="lbl">Recebido em ${monthName}</span><b>${brl(recebidoMes)}</b><div class="sub">parcelas marcadas como pagas</div></div>
+      <div class="stat"><span class="lbl">Entregas em 7 dias</span><b>${semana}</b><div class="sub">prazo final na semana</div></div>
+      <div class="stat"><span class="lbl">Parcelas atrasadas</span><b style="${atrasadas.length ? 'color:#ff6b7f' : ''}">${atrasadas.length}</b><div class="sub">${brl(atrasadas.reduce((s, x) => s + num(x.value), 0))}</div></div>
+    </div>
+    <div class="month"><span class="lbl">Falta receber</span><b>${brl(receber)}</b><span class="lbl">somando todos os projetos</span></div>
+  </div>
+  <div class="filters">
+    <span class="ttl">Filtros</span>
+    ${[['ativos', 'Ativos'], ['concluidos', 'Concluídos'], ['todos', 'Todos']].map(([k, v]) => `<button class="fpill ${pfilter === k ? 'on' : ''}" data-pfilter="${k}">${v}<span>${counts[k]}</span></button>`).join('')}
+    <div class="search">${ico('search')}<input id="psearch" placeholder="Buscar projeto ou cliente" value="${esc(search)}"></div>
+  </div>
+  ${list.length ? `<div class="pgrid">${list.map(p => {
+    const cur = currentStep(p), pz = prazoTxt(p), tot = totalOf(p), pago = paidOf(p), late = p.payments.filter(lateOf).length;
+    return `<div class="pcard" data-proj="${p.id}">
+      <div class="ph"><div class="av">${esc(initials(p.client.name))}</div><div style="flex:1;min-width:0"><div class="pt">${esc(p.title)}</div><div class="pc">${esc(p.client.name || 'Sem cliente')}${p.client.company ? ' · ' + esc(p.client.company) : ''}</div></div><span class="chip ${p.status}">${PSTATUS[p.status]}</span></div>
+      <div><div class="prow"><span>${cur ? `Etapa ${doneCount(p) + 1} de ${p.steps.length}` : 'Todas as etapas concluídas'}</span><b>${esc(cur?.name || '✓')}</b></div><div class="pbar"><i style="width:${p.steps.length ? doneCount(p) / p.steps.length * 100 : 0}%"></i></div></div>
+      <div><div class="prow"><span>${brl(pago)} de ${brl(tot)}</span>${late ? `<span class="chip late">${late} atrasada${late > 1 ? 's' : ''}</span>` : `<b>${tot ? Math.round(pago / tot * 100) : 0}% recebido</b>`}</div><div class="pbar money"><i style="width:${tot ? pago / tot * 100 : 0}%"></i></div></div>
+      <div class="prow"><span>Prazo final ${fmtDate(p.end)}</span><b class="${pz.cls}">${pz.txt}</b></div>
+    </div>`;
+  }).join('')}</div>` : `<div class="card empty" style="color:var(--mute)">${ps.length ? 'Nenhum projeto encontrado.' : 'Nenhum projeto ainda.<br>Quando um orçamento for marcado como <b>Aprovado</b>, ele vira um projeto aqui automaticamente.'}</div>`}`;
+  const s = $('#psearch');
+  s.oninput = () => { search = s.value; const pos = s.selectionStart; renderProjects(); const n = $('#psearch'); n.focus(); n.setSelectionRange(pos, pos); };
+}
+
+function renderProject() {
+  const p = findP(projId); if (!p) return go('projects');
+  const tot = totalOf(p), pago = paidOf(p), pz = prazoTxt(p), cur = currentStep(p), q = findQ(p.quoteId);
+  const f = (k, lbl, attrs = '') => `<label>${lbl}<input data-pk="${k}" value="${esc(getPath(p, k))}" ${attrs}></label>`;
+  const phone = (p.client.phone || '').replace(/\D/g, '');
+  $('#main').innerHTML = `
+  <div class="phead">
+    <button class="btn icon" data-view="projects" title="Voltar">${ico('back')}</button>
+    <h1 style="font-size:32px">${esc(p.title)}</h1>
+    <div class="sp"></div>
+    <select data-pk="status" style="width:auto;border-radius:99px">${Object.entries(PSTATUS).map(([k, v]) => `<option value="${k}" ${p.status === k ? 'selected' : ''}>${v}</option>`).join('')}</select>
+    <button class="btn" data-act="client-preview">${ico('eye')}Ver como cliente</button>
+    <button class="btn icon danger" data-act="p-del" title="Excluir projeto">${ico('trash')}</button>
+  </div>
+  <div class="pgrid2">
+    <div>
+      <div class="card">
+        <div class="row" style="align-items:flex-end;flex-wrap:wrap;gap:14px">
+          <div style="flex:1;min-width:220px"><span class="lbl">${cur ? `Etapa ${doneCount(p) + 1} de ${p.steps.length}` : 'Etapas'}</span><div class="big2">${esc(cur?.name || 'Tudo concluído')}</div>
+            <div class="pbar" style="height:9px;margin-top:12px"><i style="width:${p.steps.length ? doneCount(p) / p.steps.length * 100 : 0}%"></i></div></div>
+          <span class="chip ${pz.cls || p.status}">${pz.txt}</span>
+        </div>
+        <div class="grid g3" style="margin-top:16px">${f('title', 'Nome do projeto')}${f('start', 'Início', 'type="date"')}${f('end', 'Prazo final', 'type="date"')}</div>
+      </div>
+      <div class="card"><h3>Etapas</h3>
+        <div class="steps">${p.steps.map((s, i) => `<div class="step ${s.status}" data-step="${i}">
+          <button class="stbtn ${s.status}" data-act="step-toggle" title="${s.status === 'concluida' ? 'Reabrir etapa' : 'Concluir etapa'}">${s.status === 'concluida' ? ico('check') : ''}</button>
+          <input data-sf="name" value="${esc(s.name)}"><input type="date" data-sf="due" value="${esc(s.due)}">
+          <button class="btn icon danger" data-act="step-rm" title="Remover">${ico('x')}</button></div>`).join('')}</div>
+        <div class="row" style="margin-top:12px;flex-wrap:wrap"><button class="btn sm" data-act="step-add">${ico('plus')}Etapa</button><div class="sp"></div>
+          <select id="tplSel" style="width:auto">${Object.entries(TEMPLATES).map(([k, v]) => `<option value="${k}" ${p.template === k ? 'selected' : ''}>Modelo: ${v.label}</option>`).join('')}</select>
+          <button class="btn sm" data-act="tpl-apply">Aplicar modelo</button></div>
+      </div>
+      <div class="card"><h3>Recado para o cliente</h3>
+        <textarea data-pk="clientNotes" rows="3" placeholder="Aparece na página do cliente. Ex.: estamos finalizando as propostas, apresentação na sexta!">${esc(p.clientNotes)}</textarea>
+        <h3 style="margin-top:16px">Anotações internas</h3>
+        <textarea data-pk="internalNotes" rows="3" placeholder="Só você vê. Nunca aparece para o cliente.">${esc(p.internalNotes)}</textarea>
+      </div>
+    </div>
+    <div>
+      <div class="card"><h3>Pagamentos</h3>
+        <div class="sum3"><div><span class="lbl">Total</span><b>${brl(tot)}</b></div><div><span class="lbl">Recebido</span><b style="color:#4ade80">${brl(pago)}</b></div><div><span class="lbl">Falta</span><b>${brl(tot - pago)}</b></div></div>
+        <div class="pbar money" style="margin:0 0 6px"><i style="width:${tot ? pago / tot * 100 : 0}%"></i></div>
+        ${p.payments.map((x, i) => `<div class="pay ${x.paid ? 'paid' : ''}" data-pay="${i}">
+          <input type="checkbox" class="paybox" data-act="pay-toggle" ${x.paid ? 'checked' : ''} title="Marcar como pago">
+          <input data-pf="label" value="${esc(x.label)}">
+          <input data-pf="value" data-num inputmode="decimal" value="${fnum(x.value, 2)}">
+          <div class="sub"><label>Vencimento<input type="date" data-pf="due" value="${esc(x.due)}"></label>${x.paid ? `<label>Pago em<input type="date" data-pf="paidAt" value="${esc(x.paidAt)}"></label>` : '<span></span>'}<button class="btn icon danger" data-act="pay-rm" title="Remover">${ico('x')}</button></div>
+          ${lateOf(x) ? `<div class="note"><span class="chip late">Atrasada desde ${fmtDate(x.due)}</span></div>` : ''}
+        </div>`).join('')}
+        <button class="btn sm" data-act="pay-add" style="margin-top:10px">${ico('plus')}Parcela</button>
+      </div>
+      <div class="card"><h3>${ico('link')}Link do cliente</h3>
+        ${p.shareToken ? `<div class="sharebox"><span style="flex:1">${esc(shareURL(p))}</span><button class="btn sm" data-act="share-copy">Copiar</button></div>
+          <div class="row" style="margin-top:10px;flex-wrap:wrap">${phone ? `<button class="btn sm" data-act="share-wa">${ico('wa')}Enviar no WhatsApp</button>` : ''}<div class="sp"></div><button class="btn sm danger" data-act="share-off">Desativar link</button></div>
+          <p class="hint">O cliente vê etapas, prazos, pagamentos e o recado, nunca as anotações internas. ${demo ? '<b>Na demonstração o link não abre de verdade.</b>' : ''}</p>`
+        : `<p class="hint" style="margin:0 0 12px">Crie um link secreto para o cliente acompanhar o projeto com a sua marca, sem precisar de login.</p><button class="btn accent" data-act="share-create">${ico('link')}Criar link do cliente</button>`}
+      </div>
+      <div class="card"><h3>${ico('user')}Cliente</h3>
+        <div class="who" style="font-weight:500">${esc(p.client.name || '—')}<div class="hint" style="margin:2px 0 0">${esc(clientLines(p.client).join(' · '))}</div></div>
+        ${q ? `<button class="btn sm" data-edit="${q.id}" style="margin-top:12px">${ico('file')}Abrir orçamento #${esc(q.number)}</button>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+// ---------- página do cliente ----------
+function clientHTML(d, preview) {
+  const p = d.project, b = d.brand || {}, c = d.company || {};
+  const tot = totalOf(p), pago = paidOf(p), cur = currentStep(p), pz = prazoTxt(p);
+  const phone = (c.phone || '').replace(/\D/g, '');
+  const wa = phone ? `https://wa.me/${phone.length <= 11 ? '55' + phone : phone}?text=${encodeURIComponent(`Olá! Sobre o projeto "${p.title}"…`)}` : '';
+  return `<div class="cw">
+    ${preview ? `<div class="cprev"><span>Prévia do que o cliente vê</span><button class="btn sm light" data-act="client-close">Fechar</button></div>` : ''}
+    <div class="chero"></div>
+    <div class="ctop">${b.logoLight || b.logo ? `<img src="${b.logoLight || b.logo}" alt="${esc(b.name || '')}">` : `<b>${esc(b.name || '')}</b>`}<span class="clabel">Projeto #${esc(p.number || '')}</span></div>
+    <span class="clabel">Acompanhamento do projeto</span>
+    <h1>${esc(p.title)}</h1>
+    <div class="cmute">Para ${esc(p.client.name || '')}${p.client.company ? ' · ' + esc(p.client.company) : ''}</div>
+    <div class="ccard">
+      <span class="clabel">${p.status === 'concluido' ? 'Projeto concluído' : 'Etapa atual'}</span>
+      <div style="font-size:22px;font-weight:600;margin-top:4px">${esc(p.status === 'concluido' ? 'Tudo pronto! 🎉' : cur?.name || 'Finalizando')}</div>
+      <div class="cbar"><i style="width:${p.steps.length ? doneCount(p) / p.steps.length * 100 : 0}%"></i></div>
+      <div class="prow" style="color:inherit"><span class="cmute">${doneCount(p)} de ${p.steps.length} etapas concluídas</span><span class="cmute">${pz.txt} · ${fmtDate(p.end)}</span></div>
+      ${p.status === 'aguardando' ? `<div style="margin-top:12px;font-size:13px">⏳ Aguardando um retorno seu para seguir.</div>` : ''}
+    </div>
+    ${p.clientNotes ? `<div class="ccard"><h3>Recado</h3><div style="white-space:pre-line;line-height:1.5">${esc(p.clientNotes)}</div></div>` : ''}
+    <div class="ccard"><h3>Etapas</h3><div class="tl">${p.steps.map(s => `<div class="ts ${s.status}"><span class="dot">${s.status === 'concluida' ? ico('check') : ''}</span><span class="tn">${esc(s.name)}</span><span class="cmute">${s.status === 'concluida' ? 'Concluída' : fmtDate(s.due)}</span></div>`).join('')}</div></div>
+    <div class="ccard"><h3>Pagamentos</h3>
+      <div class="prow" style="color:inherit"><span class="cmute">Pago</span><span class="cmute">Total ${brl(tot)}</span></div>
+      <div style="font-size:24px;font-weight:600">${brl(pago)}</div>
+      <div class="cbar money"><i style="width:${tot ? pago / tot * 100 : 0}%"></i></div>
+      ${p.payments.map(x => `<div class="cpay"><div><div style="font-weight:500">${esc(x.label)}</div><div class="cmute">${x.paid ? 'Pago' + (x.paidAt ? ' em ' + fmtDate(x.paidAt) : '') : lateOf(x) ? 'Venceu em ' + fmtDate(x.due) : 'Vence em ' + fmtDate(x.due)}</div></div>
+        <div style="text-align:right"><div style="font-weight:600">${brl(x.value)}</div><span class="chip ${x.paid ? 'concluido' : lateOf(x) ? 'late' : 'aguardando'}">${x.paid ? 'Pago' : lateOf(x) ? 'Em aberto' : 'A vencer'}</span></div></div>`).join('')}
+      ${c.pix && tot > pago ? `<div class="ccard" style="margin-top:14px;padding:14px"><span class="clabel">Chave PIX</span><div style="font-weight:600;margin:4px 0;word-break:break-all">${esc(c.pix)}</div><button class="cbtn ghost" data-act="pix-copy" data-pix="${esc(c.pix)}">Copiar chave PIX</button></div>` : ''}
+    </div>
+    ${wa ? `<a class="cbtn wa" href="${wa}" target="_blank" rel="noopener">${ico('wa')}Falar no WhatsApp</a>` : ''}
+    <div class="cfoot cmute">${esc(b.name || '')}${c.insta ? ' · ' + esc(c.insta) : ''}</div>
+  </div>`;
+}
+function openClient(d, preview) {
+  const el = $('#client'), b = d.brand || {};
+  el.style.setProperty('--ca', b.accent || '#FF0048'); el.style.setProperty('--cbg', b.primary || '#131313'); el.style.setProperty('--cfg', b.light || '#F9F9F9');
+  el.innerHTML = clientHTML(d, preview); el.hidden = false; el.scrollTop = 0;
+}
+async function clientRoute(token) {
+  $('#login').hidden = true; $('.app').style.display = 'none';
+  document.title = 'Acompanhamento do projeto';
+  const el = $('#client'); el.hidden = false; el.innerHTML = '<div class="cw" style="padding-top:40vh;text-align:center" class="cmute">Carregando…</div>';
+  const {data, error} = await sb.rpc('projeto_compartilhado', {token});
+  if (error || !data) { el.innerHTML = '<div class="cw" style="padding-top:35vh;text-align:center"><h1 style="font-size:24px">Link indisponível</h1><p class="cmute">Este link foi desativado ou não existe. Fale com quem te enviou.</p></div>'; return; }
+  document.title = `${data.project.title} · ${data.brand?.name || ''}`;
+  openClient(data, false);
+}
+
+// ações dos projetos
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-proj],[data-pfilter],[data-act]'); if (!t) return;
+  const d = t.dataset;
+  if (d.proj) { projId = d.proj; return go('project', null); }
+  if (d.pfilter) { pfilter = d.pfilter; return renderProjects(); }
+  const p = view === 'project' && findP(projId);
+  const box = t.closest('[data-step],[data-pay]'), i = box ? +(box.dataset.step ?? box.dataset.pay) : -1;
+  switch (d.act) {
+    case 'go-project': projId = d.id; return go('project', null);
+    case 'make-project': { const q = findQ(d.id); projId = (projectOf(q) || newProject(q)).id; return go('project', null); }
+    case 'pix-copy': navigator.clipboard?.writeText(d.pix); return toast('Chave PIX copiada');
+    case 'client-close': $('#client').hidden = true; return;
+  }
+  if (!p) return;
+  switch (d.act) {
+    case 'step-toggle': p.steps[i].status = p.steps[i].status === 'concluida' ? 'pendente' : 'concluida'; fixSteps(p);
+      if (p.steps.every(s => s.status === 'concluida') && p.status !== 'concluido' && confirm('Todas as etapas concluídas. Marcar o projeto como Concluído?')) p.status = 'concluido';
+      break;
+    case 'step-add': p.steps.push({id: uid(), name: 'Nova etapa', due: p.end, status: 'pendente'}); fixSteps(p); break;
+    case 'step-rm': p.steps.splice(i, 1); fixSteps(p); break;
+    case 'tpl-apply': { const k = $('#tplSel').value; if (!confirm(`Trocar as etapas pelo modelo "${TEMPLATES[k].label}"? As etapas atuais serão substituídas.`)) return; p.template = k; p.steps = stepsFrom(k, p.start, p.end); break; }
+    case 'pay-toggle': p.payments[i].paid = t.checked; p.payments[i].paidAt = t.checked ? today() : ''; break;
+    case 'pay-add': p.payments.push({id: uid(), label: 'Parcela', value: Math.max(0, totalOf(p) ? 0 : 0), due: p.end, paid: false, paidAt: ''}); break;
+    case 'pay-rm': if (!confirm('Remover esta parcela?')) return; p.payments.splice(i, 1); break;
+    case 'share-create': p.shareToken = (crypto.randomUUID?.() || uid() + uid() + uid() + uid()).replace(/-/g, ''); toast('Link criado'); break;
+    case 'share-copy': navigator.clipboard?.writeText(shareURL(p)); return toast('Link copiado');
+    case 'share-wa': { const ph = (p.client.phone || '').replace(/\D/g, ''); window.open(`https://wa.me/${ph.length <= 11 ? '55' + ph : ph}?text=${encodeURIComponent(`Olá, ${p.client.name?.split(' ')[0] || ''}! Por aqui você acompanha o andamento do projeto "${p.title}": ${shareURL(p)}`)}`, '_blank'); return; }
+    case 'share-off': if (!confirm('Desativar o link? Quem tiver o link antigo não vai conseguir mais abrir.')) return; p.shareToken = ''; break;
+    case 'client-preview': return openClient({project: p, brand: state.settings.brand, company: state.settings.company}, true);
+    case 'p-del': if (!confirm(`Excluir o projeto "${p.title}"? O orçamento continua salvo.`)) return; state.projects = state.projects.filter(x => x !== p); save(); return go('projects');
+    default: return;
+  }
+  save(); renderProject();
+});
+// campos dos projetos: texto salva enquanto digita; datas, valores e status redesenham a página
+document.addEventListener('input', e => {
+  if (view !== 'project') return;
+  const t = e.target, p = findP(projId); if (!p) return;
+  const box = t.closest('[data-step],[data-pay]');
+  if (t.dataset.pk) setPath(p, t.dataset.pk, t.value);
+  else if (t.dataset.sf) p.steps[+box.dataset.step][t.dataset.sf] = t.value;
+  else if (t.dataset.pf) p.payments[+box.dataset.pay][t.dataset.pf] = t.matches('[data-num]') ? num(t.value) : t.value;
+  else return;
+  save();
+});
+document.addEventListener('change', e => {
+  if (view !== 'project') return;
+  const t = e.target;
+  if (t.type === 'date' || t.matches('[data-num]') || t.dataset.pk === 'status') renderProject();
+});
+
 // ---------- demonstração ----------
 function demoState() {
   const s = defaults();
@@ -970,6 +1347,22 @@ function demoState() {
     q(1, 38, 'aprovado', cli('Bruno Costa', 'Costa Imóveis', 6), 'Landing page de lançamento', [it('Landing page', null, {price: 2200})]),
   ];
   s.settings.nextNumber = 7;
+  // projetos dos orçamentos aprovados, em momentos diferentes
+  const mk = (q, startAgo, done, paid, extra = {}) => {
+    const p = {...buildProject(q, ago(startAgo)), ...extra};
+    p.steps.forEach((st, i) => { st.status = i < done ? 'concluida' : 'pendente'; }); fixSteps(p);
+    p.payments.forEach((x, i) => { if (i < paid) { x.paid = true; x.paidAt = x.due < ago(0) ? x.due : ago(0); } });
+    return p;
+  };
+  const [, , q4, q3, , q1] = s.quotes;
+  s.projects = [
+    mk(q4, 8, 2, 1, {clientNotes: 'Layout aprovado! Agora estamos na fase de desenvolvimento das páginas.'}),
+    mk(q3, 18, 3, 1, {status: 'aguardando', clientNotes: 'Enviamos as propostas do logotipo por e-mail. Assim que você escolher, seguimos para os ajustes.'}),
+    mk(q1, 40, 99, 1, {status: 'concluido'}),
+  ];
+  s.projects[1].end = ago(-3);
+  s.projects[1].steps.forEach((st, i, a) => { st.due = ago(18 - Math.round(21 * (i + 1) / a.length)); });
+  s.projects[2].payments.at(-1).due = ago(6);
   return s;
 }
 function startDemo() {
@@ -1081,6 +1474,7 @@ document.addEventListener('input', e => {
     const q = findQ(editId); if (!q) return;
     if (t.dataset.k) {
       setPath(q, t.dataset.k, t.dataset.k === 'validity' ? num(t.value) : val);
+      if (t.dataset.k === 'status' && val === 'aprovado' && !projectOf(q)) { newProject(q); toast('Orçamento aprovado: projeto criado em Projetos'); renderTop(); }
       if (t.dataset.k === 'client.name') fillKnownClient(q, val);
     } else if (t.dataset.f && t.closest('.item')) {
       const box = t.closest('.item'), it = q.items[+box.dataset.i];
@@ -1115,7 +1509,7 @@ async function startSession() {
   if (cache) { state = hydrate(cache.state); dirty = cache.dirty; }
   showApp(); render(); setSync(dirty ? 'saving' : 'ok');
   try {
-    if (dirty) { synced = {settings: null, quotes: new Map()}; await push(); } // envia o que ficou pendente sem internet
+    if (dirty) { synced = emptySynced(); await push(); } // envia o que ficou pendente sem internet
     if (!dirty && !(await pull())) await push(); // conta nova: cria os dados na nuvem
     render();
   } catch (e) { console.error(e); setSync('offline'); }
@@ -1142,6 +1536,7 @@ document.addEventListener('visibilitychange', async () => {
 
 applyBrand();
 (async () => {
+  if (location.hash.startsWith('#p/')) return clientRoute(location.hash.slice(3));
   if (location.hash === '#demo') startDemo();
   else {
     const {data: {session}} = await sb.auth.getSession();

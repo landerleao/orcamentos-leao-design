@@ -3,6 +3,7 @@
 !/web/
 !/docs/
 !/licenses/
+!/supabase/
 !/README.md
 !/.gitignore
 
