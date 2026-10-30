@@ -1,0 +1,12 @@
+# só o site, a documentação e as licenças vão para o GitHub
+/*
+!/web/
+!/docs/
+!/licenses/
+!/README.md
+!/.gitignore
+
+# nunca publicar
+.env*
+.vercel/
+.DS_Store
