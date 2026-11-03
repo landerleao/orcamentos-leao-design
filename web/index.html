@@ -133,8 +133,20 @@ main{padding:6px 28px 70px;max-width:1480px;margin:0 auto}
 .item-top input{font-weight:500}
 .item-top .btn.icon{width:38px;height:38px}
 .item textarea{margin-top:8px;font-size:13px}
-.item-nums{display:grid;grid-template-columns:80px 96px 1fr auto;gap:8px;margin-top:8px;align-items:end}
-.item-total{font-weight:500;padding-bottom:10px;white-space:nowrap;color:var(--accent)}
+.item-nums{display:grid;grid-template-columns:90px 80px 1fr 1fr;gap:8px;margin-top:8px;align-items:end}
+.item-area{display:grid;grid-template-columns:1fr 1fr 82px 1fr;gap:8px;margin-top:8px;align-items:end}
+.item-area select{height:42px}
+.item-foot{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:10px;flex-wrap:wrap}
+.item-foot .pf{font-size:12px;color:var(--mute)}
+.item-foot .pf b{color:#4ade80;font-weight:500}
+.item-total{font-weight:500;white-space:nowrap;color:var(--accent)}
+.profit{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.profit div{background:var(--panel2);border-radius:14px;padding:10px 12px}
+.profit b{display:block;font-size:16px;font-weight:500;white-space:nowrap}
+.profit .lbl,.sum3 .lbl{font-size:11px}
+.gain{color:#4ade80!important}
+.only-me{display:inline-flex;gap:6px;align-items:center;font-size:11px;color:var(--mute);font-weight:400;margin-left:auto}
+.fin{margin-bottom:22px}
 .preview{position:sticky;top:16px}
 .pv-wrap{overflow:hidden;border-radius:16px;box-shadow:0 20px 60px #000a;border:1px solid var(--line)}
 .pv-scale{transform-origin:0 0;width:794px}
@@ -147,7 +159,9 @@ main{padding:6px 28px 70px;max-width:1480px;margin:0 auto}
 .svc-name{font-weight:500;font-size:15px}
 .vars{display:grid;gap:6px;margin-top:10px}
 .vars:empty{display:none}
-.var{display:grid;grid-template-columns:1fr 130px 40px;gap:6px}
+.var{display:grid;grid-template-columns:1fr 100px 100px 40px;gap:6px}
+.var.vh{font-size:11px;color:var(--mute);margin-bottom:-2px}
+.svc .hint b{color:#4ade80;font-weight:500}
 .var .btn.icon{width:40px;height:42px}
 input:disabled{opacity:.45}
 .warn{color:#ffb020}
@@ -211,10 +225,11 @@ input:disabled{opacity:.45}
   .tbar .sp{display:none}
   .tbar .btn.accent{flex:1;justify-content:center}
   .g3{grid-template-columns:1fr 1fr}
-  .item-nums{grid-template-columns:1fr 1fr 1.3fr}
-  .item-total{grid-column:1/-1;padding:0;text-align:right}
+  .item-nums{grid-template-columns:1fr 1fr}
+  .item-area{grid-template-columns:1fr 1fr}
+  .profit{grid-template-columns:1fr 1fr}
   .svcs{grid-template-columns:1fr}
-  .var{grid-template-columns:1fr 110px 40px}
+  .var{grid-template-columns:1fr 84px 84px 40px}
   .logo-box{flex-wrap:wrap}
 }
 @media (max-width:1100px){.hero,.board,.editor,.brandgrid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.preview{position:static}.search{width:100%;margin-left:0}.pillnav{margin-left:0}}
@@ -452,7 +467,7 @@ function setPath(o, p, v) { const ks = p.split('.'); const last = ks.pop(); ks.r
 
 // ---------- dados ----------
 function defaults() {
-  const c = (cat, name, unit, desc = '', vars = [], consult = false) => ({id: uid(), cat, name, desc, unit, price: 0, consult, vars: vars.map(label => ({label, price: 0}))});
+  const c = (cat, name, unit, desc = '', vars = [], consult = false) => ({id: uid(), cat, name, desc, unit, cost: 0, price: 0, consult, vars: vars.map(label => ({label, cost: 0, price: 0}))});
   return {
     settings: {
       pinHash: '', nextNumber: 1,
@@ -469,7 +484,7 @@ function defaults() {
       c('Design', 'Identidade visual completa', 'projeto', 'Logotipo, paleta, tipografia, elementos e manual de marca'),
       c('Design', 'Cartão de visita', 'pedido', 'Frente e verso', ['500 un', '1.000 un', '2.000 un']),
       c('Design', 'Panfleto', 'pedido', '', ['1.000 un', '2.500 un', '5.000 un']),
-      c('Design', 'Adesivo', 'm²', 'Valor por metro quadrado'),
+      c('Design', 'Adesivo', 'm²', 'Impressão em vinil adesivo'),
       c('Programação', 'Landing page', 'projeto', 'Página única responsiva, com formulário/WhatsApp', [], true),
       c('Programação', 'Site institucional', 'projeto', 'Responsivo, com painel de edição', [], true),
       c('Programação', 'Aplicativo', 'projeto', 'Escopo a definir', [], true),
@@ -491,7 +506,7 @@ function hydrate(s) {
 function migrateCatalog(saved, fresh) {
   if (!saved) return fresh;
   if (!saved.some(c => c.vars) && saved.every(c => !c.price)) return fresh;
-  return saved.map(c => ({consult: false, vars: [], ...c}));
+  return saved.map(c => ({consult: false, cost: 0, ...c, vars: (c.vars || []).map(v => ({cost: 0, ...v}))}));
 }
 // ---------- nuvem (Supabase) ----------
 const SB_URL = 'https://uxcrfkwjlxhddhvcabci.supabase.co', SB_KEY = 'sb_publishable_AaF3xDPHVZaaeIG_jf8WRg_szUe-4AE';
@@ -584,10 +599,17 @@ async function pull() {
 // ---------- cálculo ----------
 function totals(q) {
   const sub = q.items.reduce((s, i) => s + num(i.qty) * num(i.price), 0);
+  const cost = q.items.reduce((s, i) => s + num(i.qty) * num(i.cost), 0);
   let disc = q.discountType === 'pct' ? sub * num(q.discount) / 100 : num(q.discount);
   disc = Math.max(0, Math.min(disc, sub));
-  return {sub, disc, total: sub - disc};
+  return {sub, disc, total: sub - disc, cost, profit: sub - disc - cost};
 }
+const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+// serviços cobrados por metro quadrado: no orçamento entram largura × altura e o sistema calcula a área
+const isArea = u => /^m(²|2)$/i.test(String(u || '').trim());
+const areaOf = i => { const k = i.dimU === 'm' ? 1 : .01; return +(num(i.w) * k * num(i.h) * k * (num(i.copies) || 1)).toFixed(4); };
+const fqty = n => (+n || 0).toLocaleString('pt-BR', {maximumFractionDigits: n && Math.abs(n) < .1 ? 4 : 2});
+const sizeTxt = i => `${fnum(i.w)} × ${fnum(i.h)} ${i.dimU === 'm' ? 'm' : 'cm'}${(num(i.copies) || 1) > 1 ? ` · ${fnum(i.copies)} peças` : ''}`;
 // linhas do cliente na ordem do PDF ("contact" vem de orçamentos antigos)
 const clientLines = cl => [...CLIENT_FIELDS.map(([k]) => cl[k]), cl.contact].filter(Boolean);
 // clientes já usados em outros orçamentos, o mais recente primeiro
@@ -652,8 +674,8 @@ function docHTML(q) {
   const style = `--bg:${bg};--fg:${fg};--a:${b.accent};--mute:${mix(fg, bg, .52)};--soft:${mix(fg, bg, .26)};--ln:${mix(fg, bg, .85)};font-family:${esc(fontFamily())}`;
   const money = (i, v) => num(i.price) ? brl(v) : 'A combinar';
   const rows = q.items.length ? q.items.map(i => `
-    <tr><td><div class="nm">${esc(i.name) || '—'}</div>${i.desc ? `<div class="desc">${esc(i.desc)}</div>` : ''}</td>
-    <td class="n m">${fnum(i.qty)} ${esc(i.unit)}</td><td class="n m">${money(i, i.price)}</td><td class="n"><b>${money(i, num(i.qty) * num(i.price))}</b></td></tr>`)
+    <tr><td><div class="nm">${esc(i.name) || '—'}</div>${i.desc ? `<div class="desc">${esc(i.desc)}</div>` : ''}${i.area && num(i.w) && num(i.h) ? `<div class="desc">Medida: ${sizeTxt(i)}</div>` : ''}</td>
+    <td class="n m">${fqty(i.qty)} ${esc(i.unit)}</td><td class="n m">${money(i, i.price)}</td><td class="n"><b>${money(i, num(i.qty) * num(i.price))}</b></td></tr>`)
     : ['<tr class="none"><td colspan="4">Adicione itens ao orçamento</td></tr>'];
   const thead = '<thead><tr><th>Descrição</th><th class="n">Qtd</th><th class="n">Valor unit.</th><th class="n">Total</th></tr></thead>';
   const pay = [q.payment, c.pix ? `PIX: ${c.pix}` : ''].filter(Boolean).join('\n');
@@ -719,7 +741,7 @@ function mountPreview(html) {
   pv.querySelectorAll('img').forEach(i => i.onload = fit);
 }
 let pvTimer;
-const refreshPreview = q => { clearTimeout(pvTimer); pvTimer = setTimeout(() => mountPreview(docHTML(q)), 30); };
+const refreshPreview = q => { clearTimeout(pvTimer); pvTimer = setTimeout(() => { mountPreview(docHTML(q)); const p = $('#profit'); if (p) p.innerHTML = profitHTML(q); }, 30); };
 
 // no iPhone/iPad o PDF é montado como arquivo e enviado pelo menu de compartilhar
 const isTouch = matchMedia('(pointer: coarse)').matches;
@@ -826,7 +848,7 @@ function renderList() {
   <div class="hero">
     <div class="card stats">
       <div class="stat"><span class="lbl">Em aberto</span><b>${brl(sum(open))}</b><div class="sub">${open.length} orçamento(s)</div><div class="bar"><i style="width:${sum(open) / totalAll * 100}%"></i></div></div>
-      <div class="stat"><span class="lbl">Aprovados</span><b>${brl(sum(ok))}</b><div class="sub">${ok.length} orçamento(s)</div><div class="bar"><i style="width:${sum(ok) / totalAll * 100}%"></i></div></div>
+      <div class="stat"><span class="lbl">Aprovados</span><b>${brl(sum(ok))}</b><div class="sub">${ok.length} orçamento(s)${ok.some(q => totals(q).cost) ? ` · <span class="gain">lucro ${brl(ok.reduce((s, q) => s + totals(q).profit, 0))}</span>` : ''}</div><div class="bar"><i style="width:${sum(ok) / totalAll * 100}%"></i></div></div>
       <div class="stat"><span class="lbl">Taxa de aprovação</span><b>${rate}<small>%</small></b><div class="sub">dos enviados</div><div class="bar"><i style="width:${rate}%"></i></div></div>
       <div class="stat"><span class="lbl">Ticket médio</span><b>${brl(all.length ? sum(all) / all.length : 0)}</b><div class="sub">por orçamento</div><div class="bar"><i style="width:${all.length ? 100 : 0}%"></i></div></div>
     </div>
@@ -871,6 +893,7 @@ function detailHTML(q) {
       <div><span class="lbl">Subtotal</span><b>${brl(t.sub)}</b></div>
       ${t.disc ? `<div><span class="lbl">Desconto</span><b>− ${brl(t.disc)}</b></div>` : ''}
       <div><span class="lbl">Total</span><b class="ac">${brl(t.total)}</b></div>
+      ${t.cost ? `<div><span class="lbl">Custo</span><b>${brl(t.cost)}</b></div><div><span class="lbl">Lucro</span><b class="gain">${brl(t.profit)}</b></div>` : ''}
       <div class="sp"></div>
       <button class="btn icon" data-dup="${q.id}" title="Duplicar">${ico('copy')}</button>
       ${projectOf(q) ? `<button class="btn icon" data-act="go-project" data-id="${projectOf(q).id}" title="Ver projeto">${ico('folder')}</button>` : q.status === 'aprovado' ? `<button class="btn icon" data-act="make-project" data-id="${q.id}" title="Criar projeto">${ico('folder')}</button>` : ''}
@@ -894,7 +917,8 @@ function catalogOptions() {
 // item de orçamento a partir de um serviço do catálogo (e da variação escolhida)
 function itemFrom(c, vi) {
   const v = vi == null ? null : c.vars[vi];
-  return {name: v ? `${c.name} (${v.label})` : c.name, desc: c.desc, qty: 1, unit: c.unit, price: v ? v.price : c.price, cid: c.id, vi};
+  const it = {name: v ? `${c.name} (${v.label})` : c.name, desc: c.desc, qty: 1, unit: c.unit, cost: v ? num(v.cost) : num(c.cost), price: v ? v.price : c.price, cid: c.id, vi};
+  return isArea(c.unit) ? {...it, area: true, w: '', h: '', dimU: 'cm', copies: 1, qty: 0} : it;
 }
 
 function itemsHTML(q) {
@@ -908,14 +932,33 @@ function itemsHTML(q) {
     ${varSel}
     <textarea data-f="desc" rows="2" placeholder="Detalhes (opcional)">${esc(i.desc)}</textarea>
     <p class="hint warn" ${num(i.price) ? 'hidden' : ''}>${c?.consult ? 'Sob consulta: d' : 'D'}igite o valor deste item.</p>
+    ${i.area ? `<div class="item-area">
+      <label>Largura<input data-f="w" data-num inputmode="decimal" value="${i.w === '' ? '' : fnum(i.w)}" placeholder="Ex.: 50"></label>
+      <label>Altura<input data-f="h" data-num inputmode="decimal" value="${i.h === '' ? '' : fnum(i.h)}" placeholder="Ex.: 30"></label>
+      <label>Em<select data-f="dimU"><option value="cm" ${i.dimU !== 'm' ? 'selected' : ''}>cm</option><option value="m" ${i.dimU === 'm' ? 'selected' : ''}>metros</option></select></label>
+      <label>Peças<input data-f="copies" data-num inputmode="decimal" value="${fnum(num(i.copies) || 1)}"></label>
+    </div>` : ''}
     <div class="item-nums">
-      <label>Qtd<input data-f="qty" data-num inputmode="decimal" value="${fnum(i.qty)}"></label>
-      <label>Unidade<input data-f="unit" value="${esc(i.unit)}"></label>
+      <label>${i.area ? 'Área' : 'Qtd'}<input data-f="qty" data-num inputmode="decimal" value="${fqty(i.qty)}" ${i.area ? 'readonly tabindex="-1" title="Calculada pela medida"' : ''}></label>
+      <label>Unidade<input data-f="unit" value="${esc(i.unit)}" ${i.area ? 'readonly tabindex="-1"' : ''}></label>
+      <label>Custo unit. (R$)<input data-f="cost" data-num inputmode="decimal" value="${fnum(i.cost, 2)}" title="Só você vê. Não sai no PDF."></label>
       <label>Valor unit. (R$)<input data-f="price" data-num inputmode="decimal" value="${fnum(i.price, 2)}"></label>
-      <div class="item-total">${brl(num(i.qty) * num(i.price))}</div>
     </div>
+    <div class="item-foot"><span class="pf">${itemPF(i)}</span><span class="item-total">${brl(num(i.qty) * num(i.price))}</span></div>
   </div>`;
   }).join('') || '<p class="hint" style="margin:0 0 12px">Nenhum item ainda. Adicione do catálogo ou crie um item livre.</p>';
+}
+
+// custo e lucro de um item (só aparece no sistema, nunca no PDF)
+function itemPF(i) {
+  const total = num(i.qty) * num(i.price), cost = num(i.qty) * num(i.cost);
+  if (i.area && !(num(i.w) && num(i.h))) return 'Digite a largura e a altura';
+  return (num(i.cost) ? `Custo ${brl(cost)} · Lucro <b>${brl(total - cost)}</b>` : 'Sem custo informado');
+}
+function profitHTML(q) {
+  const t = totals(q);
+  return `<div><span class="lbl">Total</span><b>${brl(t.total)}</b></div><div><span class="lbl">Custo</span><b>${brl(t.cost)}</b></div>
+    <div><span class="lbl">Lucro</span><b class="gain">${brl(t.profit)}</b></div><div><span class="lbl">Margem</span><b>${pct(t.profit, t.total)}</b></div>`;
 }
 
 function renderEditor() {
@@ -951,7 +994,8 @@ function renderEditor() {
         <div id="items">${itemsHTML(q)}</div>
         <div class="row"><select id="addCat"><option value="">+ Adicionar do catálogo…</option>${catalogOptions()}</select><button class="btn" data-act="addFree">${ico('plus')}Item livre</button></div>
       </div>
-      <div class="card"><h3>Valores e condições</h3>
+      <div class="card"><h3>Valores e condições <span class="only-me">${ico('eye')}custo e lucro só você vê</span></h3>
+        <div class="profit" id="profit">${profitHTML(q)}</div>
         <div class="grid g2">
           <label>Tipo de desconto<select data-k="discountType"><option value="pct" ${q.discountType === 'pct' ? 'selected' : ''}>Porcentagem (%)</option><option value="val" ${q.discountType === 'val' ? 'selected' : ''}>Valor (R$)</option></select></label>
           <label>Desconto<input data-k="discount" data-num inputmode="decimal" value="${fnum(q.discount)}"></label>
@@ -974,21 +1018,31 @@ function renderCatalog() {
   const cats = [...new Set(state.catalog.map(c => c.cat).filter(Boolean))];
   $('#main').innerHTML = `
   <div class="phead"><h1>Catálogo</h1><div class="sp"></div><button class="btn accent" data-cat-add>${ico('plus')}Novo serviço</button></div>
-  <p class="hint" style="margin:-8px 0 6px">Preencha os preços uma vez: eles ficam salvos e entram sozinhos em cada orçamento novo. Use <b>variações</b> para quantidades e pacotes (ex.: 500 un, 1.000 un) e marque <b>Sob consulta</b> no que depende de cada projeto.</p>
+  <p class="hint" style="margin:-8px 0 6px">Preencha o <b>custo</b> (o que sai para você) e o <b>preço</b> (o que o cliente paga) uma vez: eles ficam salvos e entram sozinhos em cada orçamento novo. O custo nunca aparece no PDF. Serviços com unidade <b>m²</b> pedem a medida no orçamento. Use <b>variações</b> para quantidades e pacotes (ex.: 500 un, 1.000 un) e marque <b>Sob consulta</b> no que depende de cada projeto.</p>
   <datalist id="cats">${cats.map(c => `<option value="${esc(c)}">`).join('')}</datalist>
   ${Object.entries(groups).map(([g, list]) => `<h3 class="cat-h">${esc(g)}</h3><div class="svcs">${list.map(([c, i]) => svcHTML(c, i)).join('')}</div>`).join('')}`;
 }
+// lucro por unidade mostrado embaixo do serviço no catálogo
+function svcPF(c) {
+  const rows = c.vars?.length ? c.vars.filter(v => num(v.price) && num(v.cost)).map(v => `${esc(v.label)}: <b>${brl(num(v.price) - num(v.cost))}</b>`)
+    : num(c.price) && num(c.cost) ? [`Lucro <b>${brl(num(c.price) - num(c.cost))}</b> por ${esc(c.unit || 'un')} (${pct(num(c.price) - num(c.cost), num(c.price))})`] : [];
+  return rows.length ? (c.vars?.length ? 'Lucro · ' : '') + rows.join(' · ') : isArea(c.unit) ? 'No orçamento você digita largura × altura e o sistema calcula a área.' : '';
+}
 function svcHTML(c, i) {
-  const hasV = c.vars?.length;
+  const hasV = c.vars?.length, area = isArea(c.unit);
   return `<div class="card svc" data-c="${i}">
     <div class="svc-top"><input class="svc-name" data-f="name" value="${esc(c.name)}" placeholder="Nome do serviço"><button class="btn icon danger" data-cat-rm="${i}" title="Remover serviço">${ico('trash')}</button></div>
     <input data-f="desc" value="${esc(c.desc)}" placeholder="Descrição padrão (sai no PDF)" style="margin-top:8px">
-    <div class="grid" style="margin-top:10px;grid-template-columns:1.4fr 1fr 1fr">
+    <div class="grid" style="margin-top:10px;grid-template-columns:1fr 1fr">
       <label>Categoria<input data-f="cat" list="cats" value="${esc(c.cat)}"></label>
       <label>Unidade<input data-f="unit" value="${esc(c.unit)}"></label>
-      ${hasV ? '<label>Preço<input value="por variação" disabled></label>' : `<label>Preço (R$)<input data-f="price" data-num inputmode="decimal" value="${fnum(c.price, 2)}"></label>`}
     </div>
-    <div class="vars">${(c.vars || []).map((v, k) => `<div class="var" data-v="${k}"><input data-vf="label" value="${esc(v.label)}" placeholder="Ex.: 500 un"><input data-vf="price" data-num inputmode="decimal" value="${fnum(v.price, 2)}" placeholder="R$" title="Preço (R$)"><button class="btn icon danger" data-var-rm="${k}" title="Remover variação">${ico('x')}</button></div>`).join('')}</div>
+    ${hasV ? '' : `<div class="grid" style="margin-top:10px;grid-template-columns:1fr 1fr">
+      <label>Custo${area ? ' por m²' : ''} (R$)<input data-f="cost" data-num inputmode="decimal" value="${fnum(c.cost, 2)}"></label>
+      <label>Preço${area ? ' por m²' : ''} (R$)<input data-f="price" data-num inputmode="decimal" value="${fnum(c.price, 2)}"></label>
+    </div>`}
+    <div class="vars">${hasV ? `<div class="var vh"><span>Variação</span><span>Custo (R$)</span><span>Preço (R$)</span><span></span></div>` : ''}${(c.vars || []).map((v, k) => `<div class="var" data-v="${k}"><input data-vf="label" value="${esc(v.label)}" placeholder="Ex.: 500 un"><input data-vf="cost" data-num inputmode="decimal" value="${fnum(v.cost, 2)}" placeholder="Custo" title="Custo (R$)"><input data-vf="price" data-num inputmode="decimal" value="${fnum(v.price, 2)}" placeholder="Preço" title="Preço (R$)"><button class="btn icon danger" data-var-rm="${k}" title="Remover variação">${ico('x')}</button></div>`).join('')}</div>
+    <p class="hint svc-pf">${svcPF(c)}</p>
     <div class="row" style="margin-top:12px"><button class="btn sm" data-var-add>${ico('plus')}Variação</button><div class="sp"></div>
       <label class="check" style="margin:0"><input type="checkbox" data-f="consult" ${c.consult ? 'checked' : ''}> Sob consulta</label></div>
   </div>`;
@@ -1102,6 +1156,8 @@ const projectOf = q => state.projects.find(p => p.quoteId === q.id);
 const findP = id => state.projects.find(p => p.id === id);
 const paidOf = p => p.payments.filter(x => x.paid).reduce((s, x) => s + num(x.value), 0);
 const totalOf = p => p.payments.reduce((s, x) => s + num(x.value), 0);
+// o custo vem do orçamento (que o cliente nunca acessa), por isso não fica salvo no projeto
+const costOf = p => { const q = findQ(p.quoteId); return q ? totals(q).cost : 0; };
 const currentStep = p => p.steps.find(s => s.status !== 'concluida');
 const doneCount = p => p.steps.filter(s => s.status === 'concluida').length;
 const lateOf = x => !x.paid && x.due && x.due < today();
@@ -1124,6 +1180,9 @@ function renderProjects() {
   const receber = ps.reduce((s, p) => s + totalOf(p) - paidOf(p), 0);
   const recebidoMes = ps.flatMap(p => p.payments).filter(x => x.paid && (x.paidAt || '').startsWith(ym)).reduce((s, x) => s + num(x.value), 0);
   const semana = active.filter(p => { const d = daysBetween(today(), p.end); return d >= 0 && d <= 7; }).length;
+  const mes = ps.filter(p => (p.start || '').startsWith(ym)), fech = mes.reduce((s, p) => s + totalOf(p), 0), custo = mes.reduce((s, p) => s + costOf(p), 0);
+  // de cada parcela recebida no mês, a parte que é lucro (na mesma proporção do projeto)
+  const lucroRecebido = ps.reduce((s, p) => { const tot = totalOf(p); return s + (tot ? p.payments.filter(x => x.paid && (x.paidAt || '').startsWith(ym)).reduce((a, x) => a + num(x.value), 0) * (tot - costOf(p)) / tot : 0); }, 0);
   const atrasadas = ps.flatMap(p => p.payments).filter(lateOf);
   const counts = {ativos: active.length, concluidos: ps.length - active.length, todos: ps.length};
   const list = ps.filter(p => pfilter === 'todos' || (pfilter === 'ativos') === (p.status !== 'concluido'))
@@ -1139,6 +1198,12 @@ function renderProjects() {
     </div>
     <div class="month"><span class="lbl">Falta receber</span><b>${brl(receber)}</b><span class="lbl">somando todos os projetos</span></div>
   </div>
+  <div class="card stats fin">
+    <div class="stat"><span class="lbl">Fechado em ${monthName}</span><b>${brl(fech)}</b><div class="sub">${mes.length} projeto(s) aprovado(s)</div></div>
+    <div class="stat"><span class="lbl">Custos de ${monthName}</span><b>${brl(custo)}</b><div class="sub">o que sai para fornecedores</div></div>
+    <div class="stat"><span class="lbl">Lucro de ${monthName}</span><b class="gain">${brl(fech - custo)}</b><div class="sub">margem de ${pct(fech - custo, fech)}</div></div>
+    <div class="stat"><span class="lbl">Lucro já recebido</span><b class="gain">${brl(lucroRecebido)}</b><div class="sub">das parcelas pagas em ${monthName}</div></div>
+  </div>
   <div class="filters">
     <span class="ttl">Filtros</span>
     ${[['ativos', 'Ativos'], ['concluidos', 'Concluídos'], ['todos', 'Todos']].map(([k, v]) => `<button class="fpill ${pfilter === k ? 'on' : ''}" data-pfilter="${k}">${v}<span>${counts[k]}</span></button>`).join('')}
@@ -1150,6 +1215,7 @@ function renderProjects() {
       <div class="ph"><div class="av">${esc(initials(p.client.name))}</div><div style="flex:1;min-width:0"><div class="pt">${esc(p.title)}</div><div class="pc">${esc(p.client.name || 'Sem cliente')}${p.client.company ? ' · ' + esc(p.client.company) : ''}</div></div><span class="chip ${p.status}">${PSTATUS[p.status]}</span></div>
       <div><div class="prow"><span>${cur ? `Etapa ${doneCount(p) + 1} de ${p.steps.length}` : 'Todas as etapas concluídas'}</span><b>${esc(cur?.name || '✓')}</b></div><div class="pbar"><i style="width:${p.steps.length ? doneCount(p) / p.steps.length * 100 : 0}%"></i></div></div>
       <div><div class="prow"><span>${brl(pago)} de ${brl(tot)}</span>${late ? `<span class="chip late">${late} atrasada${late > 1 ? 's' : ''}</span>` : `<b>${tot ? Math.round(pago / tot * 100) : 0}% recebido</b>`}</div><div class="pbar money"><i style="width:${tot ? pago / tot * 100 : 0}%"></i></div></div>
+      ${costOf(p) ? `<div class="prow"><span>Custo ${brl(costOf(p))}</span><b class="gain">Lucro ${brl(tot - costOf(p))}</b></div>` : ''}
       <div class="prow"><span>Prazo final ${fmtDate(p.end)}</span><b class="${pz.cls}">${pz.txt}</b></div>
     </div>`;
   }).join('')}</div>` : `<div class="card empty" style="color:var(--mute)">${ps.length ? 'Nenhum projeto encontrado.' : 'Nenhum projeto ainda.<br>Quando um orçamento for marcado como <b>Aprovado</b>, ele vira um projeto aqui automaticamente.'}</div>`}`;
@@ -1200,6 +1266,7 @@ function renderProject() {
       <div class="card"><h3>Pagamentos</h3>
         <div class="sum3"><div><span class="lbl">Total</span><b>${brl(tot)}</b></div><div><span class="lbl">Recebido</span><b style="color:#4ade80">${brl(pago)}</b></div><div><span class="lbl">Falta</span><b>${brl(tot - pago)}</b></div></div>
         <div class="pbar money" style="margin:0 0 6px"><i style="width:${tot ? pago / tot * 100 : 0}%"></i></div>
+        ${costOf(p) ? `<div class="sum3" style="margin:12px 0"><div><span class="lbl">Custo</span><b>${brl(costOf(p))}</b></div><div><span class="lbl">Lucro</span><b class="gain">${brl(tot - costOf(p))}</b></div><div><span class="lbl">Margem</span><b>${pct(tot - costOf(p), tot)}</b></div></div>` : ''}
         ${p.payments.map((x, i) => `<div class="pay ${x.paid ? 'paid' : ''}" data-pay="${i}">
           <input type="checkbox" class="paybox" data-act="pay-toggle" ${x.paid ? 'checked' : ''} title="Marcar como pago">
           <input data-pf="label" value="${esc(x.label)}">
@@ -1330,7 +1397,8 @@ function demoState() {
   Object.assign(s.settings.company, {doc: 'CNPJ 00.000.000/0001-00', email: 'contato@seudominio.com.br', phone: '(00) 00000-0000', pix: 'contato@seudominio.com.br'});
   const price = {'Post para feed': 90, 'Carrossel': 150, 'Logotipo': 1200, 'Identidade visual completa': 2800, 'Adesivo': 90, 'Hora de desenvolvimento': 120, 'Manutenção mensal': 250};
   const vprice = {'Pacote de posts': [600, 850, 1300], 'Edição de Reels': [120, 420, 800], 'Cartão de visita': [90, 140, 220], 'Panfleto': [180, 320, 520]};
-  s.catalog.forEach(c => { if (price[c.name]) c.price = price[c.name]; (vprice[c.name] || []).forEach((p, k) => { if (c.vars[k]) c.vars[k].price = p; }); });
+  const cost = {'Adesivo': 38}, vcost = {'Cartão de visita': [35, 55, 90], 'Panfleto': [70, 130, 220]};
+  s.catalog.forEach(c => { if (price[c.name]) c.price = price[c.name]; c.cost = cost[c.name] || 0; (vprice[c.name] || []).forEach((p, k) => { if (c.vars[k]) Object.assign(c.vars[k], {price: p, cost: vcost[c.name]?.[k] || 0}); }); });
   const it = (name, vi = null, extra = {}) => ({...itemFrom(s.catalog.find(c => c.name === name), vi), ...extra});
   const ago = d => { const x = new Date(); x.setDate(x.getDate() - d); x.setMinutes(x.getMinutes() - x.getTimezoneOffset()); return x.toISOString().slice(0, 10); };
   const year = new Date().getFullYear();
@@ -1339,7 +1407,7 @@ function demoState() {
   const cli = (name, company, n) => ({name, company, doc: `CNPJ 00.000.000/000${n}-00`, phone: '(00) 00000-0000', email: `contato@${company.toLowerCase().normalize('NFD').replace(/[^a-z]/g, '')}.com.br`, address: ''});
   s.quotes = [
     q(6, 1, 'rascunho', {...cli('Maria Souza', 'Café Aurora', 1), address: 'Rua das Flores, 120, Centro'}, 'Identidade visual + Landing page',
-      [it('Identidade visual completa'), it('Landing page', null, {price: 1900}), it('Adesivo', null, {qty: 2.5, desc: 'Adesivo de vitrine'})], {discount: 5, deadline: '20 dias úteis após aprovação'}),
+      [it('Identidade visual completa'), it('Landing page', null, {price: 1900}), it('Adesivo', null, {w: 120, h: 80, copies: 2, qty: 1.92, desc: 'Adesivo de vitrine'})], {discount: 5, deadline: '20 dias úteis após aprovação'}),
     q(5, 4, 'enviado', cli('Ana Ribeiro', 'Studio Bloom', 2), 'Social media mensal', [it('Pacote de posts', 1), it('Edição de Reels', 1)]),
     q(4, 9, 'aprovado', cli('Carlos Mendes', 'Mendes Advocacia', 3), 'Site institucional', [it('Site institucional', null, {price: 4500}), it('Manutenção mensal', null, {qty: 3})]),
     q(3, 15, 'aprovado', cli('Julia Prado', 'Doce Prado', 4), 'Logo e materiais gráficos', [it('Logotipo'), it('Cartão de visita', 1), it('Panfleto', 1)]),
@@ -1391,11 +1459,11 @@ document.addEventListener('click', e => {
   if (d.edit) return go('edit', d.edit);
   if (d.pdf) return printQuote(findQ(d.pdf));
   if (d.dup) { const n = newQuote(findQ(d.dup)); toast(`Duplicado como ${n.number}`); return go('edit', n.id); }
-  if ('catAdd' in d) { state.catalog.push({id: uid(), cat: 'Outros', name: '', desc: '', unit: 'un', price: 0, consult: false, vars: []}); save(); renderCatalog(); return document.querySelector(`.svc[data-c="${state.catalog.length - 1}"] .svc-name`)?.focus(); }
+  if ('catAdd' in d) { state.catalog.push({id: uid(), cat: 'Outros', name: '', desc: '', unit: 'un', cost: 0, price: 0, consult: false, vars: []}); save(); renderCatalog(); return document.querySelector(`.svc[data-c="${state.catalog.length - 1}"] .svc-name`)?.focus(); }
   if (d.catRm) { const c = state.catalog[+d.catRm]; if (confirm(`Remover "${c.name || 'serviço sem nome'}" do catálogo?`)) { state.catalog.splice(+d.catRm, 1); save(); renderCatalog(); } return; }
   if ('varAdd' in d || d.varRm) {
     const i = +t.closest('.svc').dataset.c, c = state.catalog[i];
-    if (d.varRm) c.vars.splice(+d.varRm, 1); else (c.vars ??= []).push({label: '', price: 0});
+    if (d.varRm) c.vars.splice(+d.varRm, 1); else (c.vars ??= []).push({label: '', cost: 0, price: 0});
     save(); renderCatalog();
     if (!d.varRm) document.querySelector(`.svc[data-c="${i}"] .var:last-child input`)?.focus();
     return;
@@ -1448,11 +1516,12 @@ document.addEventListener('change', e => {
   if (t.matches('[data-var]')) { // troca a variação de um item já adicionado
     const q = findQ(editId), it = q.items[+t.closest('.item').dataset.i], c = state.catalog.find(x => x.id === it.cid);
     const n = itemFrom(c, +t.value);
-    Object.assign(it, {name: n.name, price: n.price, vi: n.vi});
+    Object.assign(it, {name: n.name, price: n.price, cost: n.cost, vi: n.vi});
     save(); $('#items').innerHTML = itemsHTML(q); refreshPreview(q);
   }
   if (t.matches('[data-num]')) { // reformata o número ao sair do campo
-    const v = num(t.value); t.value = t.dataset.f === 'price' || t.dataset.vf === 'price' ? fnum(v, 2) : fnum(v);
+    const v = num(t.value), money = ['price', 'cost'].includes(t.dataset.f || t.dataset.vf);
+    if (!t.readOnly) t.value = t.value === '' && ['w', 'h'].includes(t.dataset.f) ? '' : money ? fnum(v, 2) : fnum(v);
   }
   if (t.matches('[data-s]')) onSetting(t);
 });
@@ -1479,7 +1548,9 @@ document.addEventListener('input', e => {
     } else if (t.dataset.f && t.closest('.item')) {
       const box = t.closest('.item'), it = q.items[+box.dataset.i];
       it[t.dataset.f] = val;
+      if (it.area) { it.qty = areaOf(it); box.querySelector('[data-f="qty"]').value = fqty(it.qty); }
       box.querySelector('.item-total').textContent = brl(num(it.qty) * num(it.price));
+      box.querySelector('.pf').innerHTML = itemPF(it);
       box.querySelector('.warn').hidden = num(it.price) > 0;
     } else return;
     save(); refreshPreview(q);
@@ -1487,6 +1558,7 @@ document.addEventListener('input', e => {
     const c = state.catalog[+t.closest('.svc').dataset.c];
     if (t.dataset.vf) c.vars[+t.closest('.var').dataset.v][t.dataset.vf] = val;
     else if (t.dataset.f) c[t.dataset.f] = t.type === 'checkbox' ? t.checked : val;
+    t.closest('.svc').querySelector('.svc-pf').innerHTML = svcPF(c);
     save();
   } else if (view === 'brand' && t.dataset.s && t.type !== 'checkbox' && t.tagName !== 'SELECT') onSetting(t);
 });
